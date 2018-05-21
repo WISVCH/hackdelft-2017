@@ -1,17 +1,8 @@
-FROM node:argon
-
-RUN mkdir /app
-WORKDIR /app
-
-RUN npm install nodemon gulp-cli -g
-
-COPY package.json /app
-RUN npm install
-
-COPY . /app
-
+FROM node:carbon AS builder
+WORKDIR /src
+COPY . .
+RUN yarn
+RUN yarn global add gulp
 RUN gulp build
-
-EXPOSE 3000
-
-CMD ["npm", "start"]
+USER 1000
+CMD node index.js
